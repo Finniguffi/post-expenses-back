@@ -64,3 +64,49 @@ If you want to learn more about building native executables, please consult <htt
 Easily start your REST Web Services
 
 [Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+
+## Running Tests
+
+You can run the tests using:
+
+```shell script
+./mvnw test
+```
+
+The test reports are generated in the `target/surefire-reports` directory.
+
+## Docker Support
+
+You can build a Docker image using the provided Dockerfile:
+
+```shell script
+docker build -f src/main/docker/Dockerfile.jvm -t post-expenses-back .
+```
+
+To run the application in a Docker container:
+
+```shell script
+docker run -i --rm -p 8080:8080 post-expenses-back
+```
+
+## Environment Variables
+
+The application supports the following environment variables:
+
+- `JAVA_DEBUG_PORT`: Port used for remote debugging. Defaults to 5005.
+- `CONTAINER_CORE_LIMIT`: A calculated core limit.
+- `CONTAINER_MAX_MEMORY`: Memory limit given to the container.
+- `GC_MIN_HEAP_FREE_RATIO`: Minimum percentage of heap free after GC to avoid expansion.
+- `GC_MAX_HEAP_FREE_RATIO`: Maximum percentage of heap free after GC to avoid shrinking.
+- `GC_TIME_RATIO`: Specifies the ratio of the time spent outside the garbage collection.
+- `GC_ADAPTIVE_SIZE_POLICY_WEIGHT`: The weighting given to the current GC time versus previous GC times.
+- `GC_METASPACE_SIZE`: The initial metaspace size.
+- `GC_MAX_METASPACE_SIZE`: The maximum metaspace size.
+- `GC_CONTAINER_OPTIONS`: Specify Java GC to use.
+- `HTTPS_PROXY`: The location of the https proxy.
+- `HTTP_PROXY`: The location of the http proxy.
+- `NO_PROXY`: A comma-separated list of hosts, IP addresses, or domains that can be accessed directly.
+
+## License
+
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
