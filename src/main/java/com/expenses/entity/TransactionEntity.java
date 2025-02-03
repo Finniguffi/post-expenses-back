@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transaction_entity")
@@ -18,6 +19,8 @@ public class TransactionEntity {
     private double amount;
 
     private String description;
+
+    private LocalDateTime transactionDate;
 
     @ManyToOne
     private UserEntity user;
@@ -44,6 +47,14 @@ public class TransactionEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getTransactionDate() {
+        return transactionDate;
+    }
+
+    public void setTransactionDate(LocalDateTime transactionDate) {
+        this.transactionDate = transactionDate;
     }
 
     public UserEntity getUser() {

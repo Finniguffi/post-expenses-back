@@ -54,7 +54,7 @@ public class BalanceResource {
     public Response deposit(@PathParam("email") String email, @PathParam("amount") double amount) {
         Double newBalance = balanceService.postBalance(email, amount);
         if (newBalance != null) {
-            return Response.ok().entity("Money added successfully. New balance: " + newBalance).build();
+            return Response.ok().entity(newBalance).build();
         } else {
             return Response.status(Response.Status.BAD_REQUEST).entity("Failed to add money").build();
         }
@@ -66,8 +66,8 @@ public class BalanceResource {
     @Produces("application/json")
     public Response postExpense(@PathParam("email") String email, TransactionDTO transactionDTO) {
         try {
-            balanceService.processExpense(email, transactionDTO);
-            return Response.ok().entity("Expense posted successfully.").build();
+            Double newBalance = balanceService.processExpense(email, transactionDTO);
+            return Response.ok().entity(newBalance).build();
         } catch (IllegalArgumentException error) {
             return Response.status(Response.Status.BAD_REQUEST).entity(error.getMessage()).build();
         } catch (Exception error) {

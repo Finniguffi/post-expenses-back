@@ -8,6 +8,7 @@ import com.expenses.interceptor.AuthorizationInterceptor;
 import com.expenses.interceptor.CheckAuthenticationInterceptor;
 import com.expenses.resource.AuthResource;
 import com.expenses.resource.BalanceResource;
+import com.expenses.resource.TransactionResource;
 import com.expenses.resource.UserResource;
 
 @ApplicationPath("/api")
@@ -20,6 +21,7 @@ public class JAXRSConfiguration extends Application {
         resources.add(AuthResource.class);
         resources.add(UserResource.class);
         resources.add(BalanceResource.class);
+        resources.add(TransactionResource.class);
         return resources;
     }
 }

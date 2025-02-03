@@ -1,5 +1,7 @@
 package com.expenses.service;
 
+import java.time.LocalDateTime;
+
 import com.expenses.dto.TransactionDTO;
 import com.expenses.entity.TransactionEntity;
 import com.expenses.entity.UserEntity;
@@ -24,7 +26,7 @@ public class BalanceService {
     TransactionRepository transactionRepository;
 
     @Transactional
-    public void processExpense(String email, TransactionDTO transactionDTO) {
+    public double processExpense(String email, TransactionDTO transactionDTO) {
         this.validateInput(email, transactionDTO.getAmount());
 
         UserEntity user = userService.getUserByEmail(email);
@@ -41,12 +43,15 @@ public class BalanceService {
         TransactionEntity transaction = createTransaction(user, transactionDTO.getAmount(), transactionDTO);
 
         this.updateBalanceAndRecordTransaction(user, transaction);
+
+        return newBalance;
     }
 
     private TransactionEntity createTransaction(UserEntity user, double amount, TransactionDTO transactionDTO) {
         TransactionEntity transaction = new TransactionEntity();
         transaction.setAmount(amount);
         transaction.setDescription(transactionDTO.getDescription());
+        transaction.setTransactionDate(LocalDateTime.now());
         transaction.setUser(user);
         return transaction;
     }
