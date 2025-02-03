@@ -17,9 +17,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/balance")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 @CheckAuthentication
 public class BalanceResource {
 
@@ -36,8 +39,6 @@ public class BalanceResource {
 
     @GET
     @Path("/{email}")
-    @Consumes("application/json")
-    @Produces("application/json")
     public Response balance(@PathParam("email") String email) {
         Double balance = balanceService.getBalance(email);
         if (balance != null) {
@@ -49,8 +50,6 @@ public class BalanceResource {
 
     @POST
     @Path("/deposit/{email}/{amount}")
-    @Consumes("application/json")
-    @Produces("application/json")
     public Response deposit(@PathParam("email") String email, @PathParam("amount") double amount) {
         Double newBalance = balanceService.postBalance(email, amount);
         if (newBalance != null) {
@@ -62,8 +61,6 @@ public class BalanceResource {
 
     @POST
     @Path("/expense/{email}")
-    @Consumes("application/json")
-    @Produces("application/json")
     public Response postExpense(@PathParam("email") String email, TransactionDTO transactionDTO) {
         try {
             Double newBalance = balanceService.processExpense(email, transactionDTO);
