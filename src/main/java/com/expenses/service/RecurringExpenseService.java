@@ -1,5 +1,6 @@
 package com.expenses.service;
 
+import com.expenses.dto.TransactionDTO;
 import com.expenses.entity.RecurringExpenseEntity;
 import com.expenses.entity.UserEntity;
 import com.expenses.repository.RecurringExpenseRepository;
@@ -20,15 +21,15 @@ public class RecurringExpenseService {
     UserRepository userRepository;
 
     @Transactional
-    public void createRecurringExpense(String email, double amount, String description, int dayOfMonth) {
-        UserEntity user = userRepository.find("email", email).firstResult();
+    public void createRecurringExpense(TransactionDTO transactionDTO, int dayOfMonth) {
+        UserEntity user = userRepository.find("email", transactionDTO.getUserEmail()).firstResult();
         if (user == null) {
             throw new IllegalArgumentException("User not found");
         }
 
         RecurringExpenseEntity recurringExpense = new RecurringExpenseEntity();
-        recurringExpense.setAmount(amount);
-        recurringExpense.setDescription(description);
+        recurringExpense.setAmount(transactionDTO.getAmount());
+        recurringExpense.setDescription(transactionDTO.getDescription());
         recurringExpense.setDayOfMonth(dayOfMonth);
         recurringExpense.setActive(true);
         recurringExpense.setUser(user);

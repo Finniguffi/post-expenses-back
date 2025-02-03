@@ -25,10 +25,10 @@ public class RecurringExpenseResource {
     RecurringExpenseService recurringExpenseService;
 
     @POST
-    @Path("/create")
-    public Response createRecurringExpense(@PathParam("email") String email, @PathParam("dayOfMonth") int dayOfMonth, TransactionDTO transactionDTO) {
+    @Path("/create/{dayOfMonth}")
+    public Response createRecurringExpense(@PathParam("dayOfMonth") int dayOfMonth, TransactionDTO transactionDTO) {
         try {
-            recurringExpenseService.createRecurringExpense(email, transactionDTO.getAmount(), transactionDTO.getDescription(), dayOfMonth);
+            recurringExpenseService.createRecurringExpense(transactionDTO, dayOfMonth);
             return Response.ok("Recurring expense created successfully").build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
