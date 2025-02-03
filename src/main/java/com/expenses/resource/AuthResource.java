@@ -17,6 +17,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
 
 @Path("/auth")
+@Consumes("application/json")
+@Produces("application/json")
 public class AuthResource {
 
     @Inject
@@ -26,8 +28,6 @@ public class AuthResource {
     
     @POST
     @Path("/login")
-    @Consumes("application/json")
-    @Produces("application/json")
     public Response login(LoginDTO loginDTO) {
         String token = authService.authenticate(loginDTO);
         return Response.ok().entity(token).build();
@@ -35,8 +35,6 @@ public class AuthResource {
 
     @POST
     @Path("/register")
-    @Consumes("application/json")
-    @Produces("application/json")
     public Response register(RegisterDTO registerDTO) {
         logger.info("Registering user with email: " + registerDTO.getEmail());
         authService.register(registerDTO);
@@ -45,7 +43,6 @@ public class AuthResource {
 
     @GET
     @Path("/validate")
-    @Produces("application/json")
     public Response validateToken(@HeaderParam("Authorization") String token) {
         boolean isValid = Jwt.validateToken(token);
         return Response.ok(isValid).build();
