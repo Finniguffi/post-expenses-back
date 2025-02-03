@@ -61,17 +61,17 @@ public class BalanceResource {
     }
 
     @POST
-    @Path("/expense/{email}/{amount}")
+    @Path("/expense/{email}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response postExpense(@PathParam("email") String email, @PathParam("amount") double amount, TransactionDTO transactionDTO) {
+    public Response postExpense(@PathParam("email") String email, TransactionDTO transactionDTO) {
         try {
-            balanceService.processExpense(email, amount, transactionDTO);
+            balanceService.processExpense(email, transactionDTO);
             return Response.ok().entity("Expense posted successfully.").build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        } catch (Exception e) {
-            LOGGER.error("Error posting expense", e);
+        } catch (IllegalArgumentException error) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(error.getMessage()).build();
+        } catch (Exception error) {
+            LOGGER.error("Error posting expense", error);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("An error occurred while processing the expense").build();
         }

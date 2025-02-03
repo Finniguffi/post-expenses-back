@@ -24,21 +24,21 @@ public class BalanceService {
     TransactionRepository transactionRepository;
 
     @Transactional
-    public void processExpense(String email, double amount, TransactionDTO transactionDTO) {
-        this.validateInput(email, amount);
+    public void processExpense(String email, TransactionDTO transactionDTO) {
+        this.validateInput(email, transactionDTO.getAmount());
 
         UserEntity user = userService.getUserByEmail(email);
         if (user == null) {
             throw new IllegalArgumentException("User not found");
         }
 
-        double newBalance = calculateNewBalance(user, amount);
+        double newBalance = calculateNewBalance(user, transactionDTO.getAmount());
         if (newBalance < 0) {
             throw new IllegalArgumentException("Insufficient balance");
         }
 
         user.setBalance(newBalance);
-        TransactionEntity transaction = createTransaction(user, amount, transactionDTO);
+        TransactionEntity transaction = createTransaction(user, transactionDTO.getAmount(), transactionDTO);
 
         this.updateBalanceAndRecordTransaction(user, transaction);
     }
