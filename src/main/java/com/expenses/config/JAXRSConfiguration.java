@@ -4,6 +4,8 @@ import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 import java.util.Set;
 import java.util.HashSet;
+
+import com.expenses.exception.ApplicationExceptionMapper;
 import com.expenses.interceptor.AuthorizationInterceptor;
 import com.expenses.interceptor.CheckAuthenticationInterceptor;
 import com.expenses.resource.AuthResource;
@@ -24,6 +26,7 @@ public class JAXRSConfiguration extends Application {
         resources.add(BalanceResource.class);
         resources.add(TransactionResource.class);
         resources.add(RecurringExpenseResource.class);
+        resources.add(ApplicationExceptionMapper.class);
         return resources;
     }
 }

@@ -1,24 +1,20 @@
 package com.expenses.resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.expenses.constants.ErrorConstants;
 import com.expenses.dto.TransactionDTO;
+import com.expenses.exception.ApplicationException;
+import com.expenses.exception.ErrorResponse;
 import com.expenses.service.BalanceService;
 import com.expenses.service.UserService;
 import com.expenses.util.CheckAuthentication;
-
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/balance")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -40,22 +36,38 @@ public class BalanceResource {
     @GET
     @Path("/{email}")
     public Response balance(@PathParam("email") String email) {
-        Double balance = balanceService.getBalance(email);
-        if (balance != null) {
+        try {
+            Double balance = balanceService.getBalance(email);
             return Response.ok().entity(balance).build();
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Failed to get balance").build();
+        } catch (ApplicationException e) {
+            LOGGER.error("Error getting balance: {}", e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getErrorCode(), e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error getting balance", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE))
+                    .build();
         }
     }
 
     @POST
     @Path("/deposit/{email}/{amount}")
     public Response deposit(@PathParam("email") String email, @PathParam("amount") double amount) {
-        Double newBalance = balanceService.postBalance(email, amount);
-        if (newBalance != null) {
+        try {
+            Double newBalance = balanceService.postBalance(email, amount);
             return Response.ok().entity(newBalance).build();
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Failed to add money").build();
+        } catch (ApplicationException e) {
+            LOGGER.error("Error during deposit: {}", e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getErrorCode(), e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error during deposit", e);
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE))
+                    .build();
         }
     }
 
@@ -65,12 +77,16 @@ public class BalanceResource {
         try {
             Double newBalance = balanceService.processExpense(email, transactionDTO);
             return Response.ok().entity(newBalance).build();
-        } catch (IllegalArgumentException error) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(error.getMessage()).build();
-        } catch (Exception error) {
-            LOGGER.error("Error posting expense", error);
+        } catch (ApplicationException e) {
+            LOGGER.error("Error posting expense: {}", e.getMessage());
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getErrorCode(), e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            LOGGER.error("Unexpected error posting expense", e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity("An error occurred while processing the expense").build();
+                    .entity(new ErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE))
+                    .build();
         }
     }
 }

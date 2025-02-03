@@ -1,17 +1,14 @@
 package com.expenses.resource;
 
+import com.expenses.constants.ErrorConstants;
 import com.expenses.dto.TransactionDTO;
 import com.expenses.entity.RecurringExpenseEntity;
+import com.expenses.exception.ApplicationException;
+import com.expenses.exception.ErrorResponse;
 import com.expenses.service.RecurringExpenseService;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
@@ -30,29 +27,65 @@ public class RecurringExpenseResource {
         try {
             recurringExpenseService.createRecurringExpense(transactionDTO, dayOfMonth);
             return Response.ok("Recurring expense created successfully").build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (ApplicationException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getErrorCode(), e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE))
+                    .build();
         }
     }
 
     @GET
     @Path("/all/{email}")
     public Response getRecurringExpenses(@PathParam("email") String email) {
-        List<RecurringExpenseEntity> recurringExpenses = recurringExpenseService.getRecurringExpenses(email);
-        return Response.ok(recurringExpenses).build();
+        try {
+            List<RecurringExpenseEntity> recurringExpenses = recurringExpenseService.getRecurringExpenses(email);
+            return Response.ok(recurringExpenses).build();
+        } catch (ApplicationException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getErrorCode(), e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE))
+                    .build();
+        }
     }
 
     @GET
     @Path("/active/{email}")
     public Response getActiveRecurringExpenses(@PathParam("email") String email) {
-        List<RecurringExpenseEntity> activeRecurringExpenses = recurringExpenseService.getActiveRecurringExpenses(email);
-        return Response.ok(activeRecurringExpenses).build();
+        try {
+            List<RecurringExpenseEntity> activeRecurringExpenses = recurringExpenseService.getActiveRecurringExpenses(email);
+            return Response.ok(activeRecurringExpenses).build();
+        } catch (ApplicationException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getErrorCode(), e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE))
+                    .build();
+        }
     }
 
     @PUT
     @Path("/disable/{id}")
     public Response disableRecurringExpense(@PathParam("id") Long id) {
-        recurringExpenseService.disableRecurringExpense(id);
-        return Response.ok("Recurring expense disabled successfully").build();
+        try {
+            recurringExpenseService.disableRecurringExpense(id);
+            return Response.ok("Recurring expense disabled successfully").build();
+        } catch (ApplicationException e) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(e.getErrorCode(), e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorResponse(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE))
+                    .build();
+        }
     }
 }
