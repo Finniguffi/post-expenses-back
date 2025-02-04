@@ -5,24 +5,23 @@ import com.expenses.exception.ApplicationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
+import jakarta.enterprise.context.ApplicationScoped;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+@ApplicationScoped
 public class Jwt {
-    // private static final String SECRET_KEY = System.getenv("SECRET_KEY"); // TODO This isnt working
-    private static final String SECRET_KEY = "password";
+
+    @ConfigProperty(name="quarkus.secret.key")
+    String SECRET_KEY;
 
     private static final long EXPIRATION_TIME = 86400000; // 1 day in milliseconds
 
-    static {
-        if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
-            throw new IllegalArgumentException("SECRET_KEY environment variable is not set or is empty.");
-        }
-    }
-
-    public static String generateToken(String email) {
+    public String generateToken(String email) {
         try {
             return Jwts.builder()
                     .setSubject(email)
@@ -35,7 +34,7 @@ public class Jwt {
         }
     }
 
-    public static boolean validateToken(String token) {
+    public boolean validateToken(String token) {
         try {
             Jwts.parser()
                 .setSigningKey(SECRET_KEY)
@@ -48,7 +47,7 @@ public class Jwt {
         }
     }
 
-    public static String validateTokenAndGetEmail(String token) {
+    public String validateTokenAndGetEmail(String token) {
         try {
             Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
             return claims.getSubject();

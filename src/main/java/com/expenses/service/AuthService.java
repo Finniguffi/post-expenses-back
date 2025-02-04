@@ -17,6 +17,9 @@ public class AuthService {
     @Inject
     UserRepository userRepository;
 
+    @Inject
+    Jwt jwt;
+
     @Transactional
     public UserEntity register(RegisterDTO registerDTO) {
         try {
@@ -36,7 +39,7 @@ public class AuthService {
             if (user == null || !user.getPassword().equals(loginDTO.getPassword())) {
                 throw new ApplicationException(ErrorConstants.USER_NOT_FOUND_CODE, ErrorConstants.USER_NOT_FOUND_MESSAGE);
             }
-            return Jwt.generateToken(user.getEmail());
+            return jwt.generateToken(user.getEmail());
         } catch (ApplicationException e) {
             throw e;
         } catch (Exception e) {

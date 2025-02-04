@@ -22,6 +22,9 @@ public class AuthResource {
     @Inject
     AuthService authService;
 
+    @Inject
+    Jwt jwt;
+
     private static final Logger logger = LoggerFactory.getLogger(AuthResource.class);
 
     @POST
@@ -67,7 +70,7 @@ public class AuthResource {
     @Path("/validate")
     public Response validateToken(@HeaderParam("Authorization") String token) {
         try {
-            boolean isValid = Jwt.validateToken(token);
+            boolean isValid = jwt.validateToken(token);
             return Response.ok(isValid).build();
         } catch (ApplicationException e) {
             logger.error("Error during token validation: {}", e.getMessage());

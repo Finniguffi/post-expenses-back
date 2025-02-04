@@ -4,6 +4,8 @@ import com.expenses.constants.ErrorConstants;
 import com.expenses.exception.ApplicationException;
 import com.expenses.exception.ErrorResponse;
 import com.expenses.util.Jwt;
+
+import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.Response;
@@ -19,6 +21,9 @@ import java.util.List;
 public class AuthorizationInterceptor implements ContainerRequestFilter {
 
     private static final List<String> EXCLUDED_PATHS = Arrays.asList("/auth/login", "/auth/register");
+
+    @Inject
+    Jwt jwt;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -41,7 +46,7 @@ public class AuthorizationInterceptor implements ContainerRequestFilter {
         String token = authorizationHeader.trim();
 
         try {
-            String userEmail = Jwt.validateTokenAndGetEmail(token);
+            String userEmail = jwt.validateTokenAndGetEmail(token);
             if (userEmail == null) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                         .entity(new ErrorResponse(ErrorConstants.INVALID_TOKEN_CODE, ErrorConstants.INVALID_TOKEN_MESSAGE))
