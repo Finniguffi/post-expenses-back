@@ -15,7 +15,6 @@ public class Jwt {
 
     private static String getSecretKey() {
         String secretKey = System.getenv("SECRET_KEY");
-        System.err.println("TESTE" + secretKey);
         if (secretKey == null || secretKey.isEmpty()) {
             throw new IllegalArgumentException("SECRET_KEY environment variable is not set or is empty.");
         }
