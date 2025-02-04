@@ -53,10 +53,10 @@ public class BalanceResource {
     }
 
     @POST
-    @Path("/deposit/{email}/{amount}")
-    public Response deposit(@PathParam("email") String email, @PathParam("amount") double amount) {
+    @Path("/deposit/{email}")
+    public Response deposit(@PathParam("email") String email, TransactionDTO transactionDTO) {
         try {
-            Double newBalance = balanceService.postBalance(email, amount);
+            Double newBalance = balanceService.processDeposit(email, transactionDTO);
             return Response.ok().entity(newBalance).build();
         } catch (ApplicationException e) {
             LOGGER.error("Error during deposit: {}", e.getMessage());

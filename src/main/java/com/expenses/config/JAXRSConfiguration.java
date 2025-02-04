@@ -13,6 +13,7 @@ import com.expenses.resource.BalanceResource;
 import com.expenses.resource.RecurringExpenseResource;
 import com.expenses.resource.TransactionResource;
 import com.expenses.resource.UserResource;
+import com.expenses.resource.CategoryResource;
 
 @ApplicationPath("/api")
 public class JAXRSConfiguration extends Application {
@@ -26,6 +27,7 @@ public class JAXRSConfiguration extends Application {
         resources.add(BalanceResource.class);
         resources.add(TransactionResource.class);
         resources.add(RecurringExpenseResource.class);
+        resources.add(CategoryResource.class);
         resources.add(ApplicationExceptionMapper.class);
         return resources;
     }

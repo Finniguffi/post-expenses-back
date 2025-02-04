@@ -27,6 +27,9 @@ public abstract class TransactionBaseEntity {
     @ManyToOne
     private UserEntity user;
 
+    @ManyToOne
+    private CategoryEntity category;
+
     public Long getId() {
         return id;
     }
@@ -73,5 +76,13 @@ public abstract class TransactionBaseEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
     }
 }

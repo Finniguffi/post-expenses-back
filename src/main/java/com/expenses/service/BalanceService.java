@@ -2,9 +2,11 @@ package com.expenses.service;
 
 import com.expenses.constants.ErrorConstants;
 import com.expenses.dto.TransactionDTO;
+import com.expenses.entity.CategoryEntity;
 import com.expenses.entity.TransactionEntity;
 import com.expenses.entity.UserEntity;
 import com.expenses.exception.ApplicationException;
+import com.expenses.repository.CategoryRepository;
 import com.expenses.repository.TransactionRepository;
 import com.expenses.repository.UserRepository;
 
@@ -25,6 +27,10 @@ public class BalanceService {
     @Inject
     TransactionRepository transactionRepository;
 
+    @Inject
+    CategoryRepository categoryRepository;
+
+
     @Transactional
     public double processExpense(String email, TransactionDTO transactionDTO) {
         try {
@@ -41,7 +47,7 @@ public class BalanceService {
             }
 
             user.setBalance(newBalance);
-            TransactionEntity transaction = createTransaction(user, transactionDTO.getAmount(), transactionDTO, false);
+            TransactionEntity transaction = createTransaction(user, transactionDTO);
 
             this.updateBalanceAndRecordTransaction(user, transaction);
 
@@ -53,27 +59,34 @@ public class BalanceService {
         }
     }
 
-    private TransactionEntity createTransaction(UserEntity user, double amount, TransactionDTO transactionDTO, boolean isDeposit) {
+    private TransactionEntity createTransaction(UserEntity user, TransactionDTO transactionDTO) {
         TransactionEntity transaction = new TransactionEntity();
-        transaction.setAmount(amount);
+        transaction.setAmount(transactionDTO.getAmount());
         transaction.setDescription(transactionDTO.getDescription());
         transaction.setTransactionDate(LocalDateTime.now());
         transaction.setUser(user);
-        transaction.setDeposit(isDeposit);
+        transaction.setDeposit(transactionDTO.isDeposit());
+
+        CategoryEntity category = categoryRepository.findByName(transactionDTO.getCategory());
+        if (category == null) {
+            throw new ApplicationException(ErrorConstants.CATEGORY_NOT_FOUND_CODE, "Category not found: " + transactionDTO.getCategory());
+        }
+        transaction.setCategory(category);
+
         return transaction;
     }
 
     @Transactional
-    public Double postBalance(String email, double amount) {
+    public Double processDeposit(String email, TransactionDTO transactionDTO) {
         try {
             UserEntity user = getUser(email);
-            if (amount <= 0) {
+            if (transactionDTO.getAmount() <= 0) {
                 throw new ApplicationException(ErrorConstants.INVALID_AMOUNT_CODE, ErrorConstants.INVALID_AMOUNT_MESSAGE);
             }
-            double newBalance = this.getBalance(email) + amount;
+            double newBalance = this.getBalance(email) + transactionDTO.getAmount();
             user.setBalance(newBalance);
 
-            TransactionEntity transaction = createTransaction(user, amount, new TransactionDTO(null, amount, "Deposit", null, email, false), true);
+            TransactionEntity transaction = createTransaction(user, transactionDTO);
             transactionRepository.persist(transaction);
 
             userRepository.persist(user);

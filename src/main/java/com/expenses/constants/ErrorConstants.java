@@ -38,4 +38,11 @@ public final class ErrorConstants {
     // General errors
     public static final String INTERNAL_SERVER_ERROR_CODE = "ERR009";
     public static final String INTERNAL_SERVER_ERROR_MESSAGE = "An internal server error occurred";
+
+    // Category-related errors
+    public static final String CATEGORY_NOT_FOUND_CODE = "ERR010";
+    public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
+    public static final String CATEGORY_ALREADY_EXISTS_CODE = "ERR011";
+    public static final String CATEGORY_ALREADY_EXISTS_MESSAGE = "Category already exists";
+
 }

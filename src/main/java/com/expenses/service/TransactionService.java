@@ -3,9 +3,11 @@ package com.expenses.service;
 import com.expenses.constants.ErrorConstants;
 import com.expenses.dto.TransactionDTO;
 import com.expenses.entity.TransactionEntity;
+import com.expenses.entity.CategoryEntity;
 import com.expenses.entity.RecurringExpenseEntity;
 import com.expenses.exception.ApplicationException;
 import com.expenses.repository.TransactionRepository;
+import com.expenses.repository.CategoryRepository;
 import com.expenses.repository.RecurringExpenseRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -19,6 +21,9 @@ public class TransactionService {
 
     @Inject
     TransactionRepository transactionRepository;
+
+    @Inject
+    CategoryRepository categoryRepository;
 
     @Inject
     RecurringExpenseRepository recurringExpenseRepository;
@@ -63,24 +68,26 @@ public class TransactionService {
     }
 
     private TransactionDTO mapToDTO(TransactionEntity transaction) {
-        return new TransactionDTO(
-                transaction.getId(),
-                transaction.getAmount(),
-                transaction.getDescription(),
-                transaction.getTransactionDate(),
-                transaction.getUser().getEmail(),
-                transaction.isDeposit()
-        );
+        return new TransactionDTO.Builder()
+            .setId(transaction.getId())
+            .setAmount(transaction.getAmount())
+            .setDescription(transaction.getDescription())
+            .setTransactionDate(transaction.getTransactionDate())
+            .setUserEmail(transaction.getUser().getEmail())
+            .setDeposit(transaction.isDeposit())
+            .setCategory(transaction.getCategory() != null ? transaction.getCategory().getName() : null)
+            .build();
     }
-
+    
     private TransactionDTO mapToDTO(RecurringExpenseEntity recurringExpense) {
-        return new TransactionDTO(
-                recurringExpense.getId(),
-                recurringExpense.getAmount(),
-                recurringExpense.getDescription(),
-                null,
-                recurringExpense.getUser().getEmail(),
-                recurringExpense.isDeposit()
-        );
+        return new TransactionDTO.Builder()
+            .setId(recurringExpense.getId())
+            .setAmount(recurringExpense.getAmount())
+            .setDescription(recurringExpense.getDescription())
+            .setTransactionDate(null)
+            .setUserEmail(recurringExpense.getUser().getEmail())
+            .setDeposit(recurringExpense.isDeposit())
+            .setCategory(recurringExpense.getCategory() != null ? recurringExpense.getCategory().getName() : null)
+            .build();
     }
 }
