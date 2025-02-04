@@ -69,7 +69,7 @@ public class TransactionService {
                 transaction.getDescription(),
                 transaction.getTransactionDate(),
                 transaction.getUser().getEmail(),
-                false 
+                transaction.isDeposit()
         );
     }
 
@@ -80,7 +80,7 @@ public class TransactionService {
                 recurringExpense.getDescription(),
                 null,
                 recurringExpense.getUser().getEmail(),
-                true
+                recurringExpense.isDeposit()
         );
     }
 }

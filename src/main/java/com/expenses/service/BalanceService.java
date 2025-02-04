@@ -41,7 +41,7 @@ public class BalanceService {
             }
 
             user.setBalance(newBalance);
-            TransactionEntity transaction = createTransaction(user, transactionDTO.getAmount(), transactionDTO);
+            TransactionEntity transaction = createTransaction(user, transactionDTO.getAmount(), transactionDTO, false);
 
             this.updateBalanceAndRecordTransaction(user, transaction);
 
@@ -53,12 +53,13 @@ public class BalanceService {
         }
     }
 
-    private TransactionEntity createTransaction(UserEntity user, double amount, TransactionDTO transactionDTO) {
+    private TransactionEntity createTransaction(UserEntity user, double amount, TransactionDTO transactionDTO, boolean isDeposit) {
         TransactionEntity transaction = new TransactionEntity();
         transaction.setAmount(amount);
         transaction.setDescription(transactionDTO.getDescription());
         transaction.setTransactionDate(LocalDateTime.now());
         transaction.setUser(user);
+        transaction.setDeposit(isDeposit);
         return transaction;
     }
 
@@ -71,6 +72,10 @@ public class BalanceService {
             }
             double newBalance = this.getBalance(email) + amount;
             user.setBalance(newBalance);
+
+            TransactionEntity transaction = createTransaction(user, amount, new TransactionDTO(null, amount, "Deposit", null, email, false), true);
+            transactionRepository.persist(transaction);
+
             userRepository.persist(user);
             return newBalance;
         } catch (ApplicationException e) {
