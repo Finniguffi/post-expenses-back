@@ -5,6 +5,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -20,6 +21,7 @@ public abstract class TransactionBaseEntity {
 
     private LocalDateTime transactionDate;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
     private boolean isDeposit;
 
     @ManyToOne

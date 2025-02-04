@@ -11,15 +11,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
 
 public class Jwt {
-    // private static final String SECRET_KEY = System.getenv("SECRET_KEY"); // TODO This isnt working
-    private static final String SECRET_KEY = "password";
-
     private static final long EXPIRATION_TIME = 86400000; // 1 day in milliseconds
 
-    static {
-        if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
+    private static String getSecretKey() {
+        String secretKey = System.getenv("SECRET_KEY");
+        System.err.println("TESTE" + secretKey);
+        if (secretKey == null || secretKey.isEmpty()) {
             throw new IllegalArgumentException("SECRET_KEY environment variable is not set or is empty.");
         }
+        return secretKey;
     }
 
     public static String generateToken(String email) {
@@ -28,7 +28,7 @@ public class Jwt {
                     .setSubject(email)
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                    .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                    .signWith(SignatureAlgorithm.HS512, getSecretKey())
                     .compact();
         } catch (Exception e) {
             throw new ApplicationException(ErrorConstants.INTERNAL_SERVER_ERROR_CODE, ErrorConstants.INTERNAL_SERVER_ERROR_MESSAGE, e);
@@ -38,7 +38,7 @@ public class Jwt {
     public static boolean validateToken(String token) {
         try {
             Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSecretKey())
                 .parseClaimsJws(token);
             return true;
         } catch (SignatureException | ExpiredJwtException e) {
@@ -50,7 +50,7 @@ public class Jwt {
 
     public static String validateTokenAndGetEmail(String token) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+            Claims claims = Jwts.parser().setSigningKey(getSecretKey()).parseClaimsJws(token).getBody();
             return claims.getSubject();
         } catch (SignatureException | ExpiredJwtException e) {
             throw new ApplicationException(ErrorConstants.INVALID_TOKEN_CODE, ErrorConstants.INVALID_TOKEN_MESSAGE, e);

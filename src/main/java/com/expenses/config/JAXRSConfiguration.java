@@ -27,6 +27,7 @@ public class JAXRSConfiguration extends Application {
         resources.add(TransactionResource.class);
         resources.add(RecurringExpenseResource.class);
         resources.add(ApplicationExceptionMapper.class);
+        resources.add(EnvLoader.class); 
         return resources;
     }
 }
