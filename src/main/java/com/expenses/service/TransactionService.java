@@ -3,7 +3,6 @@ package com.expenses.service;
 import com.expenses.constants.ErrorConstants;
 import com.expenses.dto.TransactionDTO;
 import com.expenses.entity.TransactionEntity;
-import com.expenses.entity.CategoryEntity;
 import com.expenses.entity.RecurringExpenseEntity;
 import com.expenses.exception.ApplicationException;
 import com.expenses.repository.TransactionRepository;
