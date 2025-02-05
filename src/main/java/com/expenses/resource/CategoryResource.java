@@ -23,8 +23,8 @@ public class CategoryResource {
 
     @POST
     @Path("/create")
-    public Response addCategory(CategoryDTO categoryDTO) {
-        categoryService.addCategory(categoryDTO.getname());
+    public Response createCategory(CategoryDTO categoryDTO) {
+        categoryService.createCategory(categoryDTO.getname());
         return Response.status(Response.Status.CREATED).build();
     }
 

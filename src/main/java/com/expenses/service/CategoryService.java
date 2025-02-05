@@ -21,7 +21,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public void addCategory(String name) {
+    public void createCategory(String name) {
         CategoryEntity existingCategory = categoryRepository.findByName(name);
         if (existingCategory != null) {
             throw new ApplicationException(ErrorConstants.CATEGORY_ALREADY_EXISTS_CODE, ErrorConstants.CATEGORY_ALREADY_EXISTS_MESSAGE);

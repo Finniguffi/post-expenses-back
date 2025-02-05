@@ -6,6 +6,7 @@ import com.expenses.entity.RecurringExpenseEntity;
 import com.expenses.exception.ApplicationException;
 import com.expenses.exception.ErrorResponse;
 import com.expenses.service.RecurringExpenseService;
+import com.expenses.util.CheckAuthentication;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -40,6 +41,7 @@ public class RecurringExpenseResource {
 
     @GET
     @Path("/all/{email}")
+    @CheckAuthentication
     public Response getRecurringExpenses(@PathParam("email") String email) {
         try {
             List<RecurringExpenseEntity> recurringExpenses = recurringExpenseService.getRecurringExpenses(email);
@@ -57,6 +59,7 @@ public class RecurringExpenseResource {
 
     @GET
     @Path("/active/{email}")
+    @CheckAuthentication
     public Response getActiveRecurringExpenses(@PathParam("email") String email) {
         try {
             List<RecurringExpenseEntity> activeRecurringExpenses = recurringExpenseService.getActiveRecurringExpenses(email);
