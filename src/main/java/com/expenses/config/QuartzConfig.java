@@ -6,12 +6,12 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.context.Initialized;
+import io.quarkus.runtime.StartupEvent;
 
 @ApplicationScoped
 public class QuartzConfig {
 
-    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
+    public void init(@Observes StartupEvent event) {
         try {
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
@@ -25,7 +25,9 @@ public class QuartzConfig {
                     .withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(0, 0))
                     .build();
 
-            scheduler.scheduleJob(job, trigger);
+            if (!scheduler.checkExists(job.getKey())) {
+                scheduler.scheduleJob(job, trigger);
+            }
         } catch (SchedulerException e) {
             e.printStackTrace();
         }

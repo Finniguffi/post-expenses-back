@@ -36,7 +36,7 @@ public class BalanceService {
         try {
             this.validateInput(email, transactionDTO.getAmount());
 
-            UserEntity user = userService.getUserByEmail(email);
+            UserEntity user = userRepository.findByEmail(email);
             if (user == null) {
                 throw new ApplicationException(ErrorConstants.USER_NOT_FOUND_CODE, ErrorConstants.USER_NOT_FOUND_MESSAGE);
             }
@@ -69,7 +69,7 @@ public class BalanceService {
 
         CategoryEntity category = categoryRepository.findByName(transactionDTO.getCategory());
         if (category == null) {
-            throw new ApplicationException(ErrorConstants.CATEGORY_NOT_FOUND_CODE, "Category not found: " + transactionDTO.getCategory());
+            throw new ApplicationException(ErrorConstants.CATEGORY_NOT_FOUND_CODE, ErrorConstants.CATEGORY_NOT_FOUND_MESSAGE + transactionDTO.getCategory());
         }
         transaction.setCategory(category);
 

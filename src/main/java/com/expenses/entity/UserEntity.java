@@ -23,9 +23,6 @@ public class UserEntity {
     @Column(nullable = false, columnDefinition = "double precision default 0.0")
     private double balance; 
 
-    public UserDTO toUserDTO() {
-        return new UserDTO(this.id, this.email, this.balance);
-    }
 
     public Long getId() {
         return id;

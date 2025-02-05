@@ -16,7 +16,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 public class Jwt {
 
-    @ConfigProperty(name="quarkus.secret.key")
+    @ConfigProperty(name="secret.key")
     String SECRET_KEY;
 
     private static final long EXPIRATION_TIME = 86400000; // 1 day in milliseconds

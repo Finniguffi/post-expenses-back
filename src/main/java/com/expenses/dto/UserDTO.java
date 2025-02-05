@@ -5,33 +5,46 @@ public class UserDTO {
     private String email;
     private Double balance;
 
-    public UserDTO(Long id, String email, Double balance) {
-        this.id = id;
-        this.email = email;
-        this.balance = balance;
+    private UserDTO(Builder builder) {
+        this.id = builder.id;
+        this.email = builder.email;
+        this.balance = builder.balance;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
+    public static class Builder {
+        private Long id;
+        private String email;
+        private Double balance;
+
+        public Builder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder setBalance(Double balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        public UserDTO build() {
+            return new UserDTO(this);
+        }
     }
 }

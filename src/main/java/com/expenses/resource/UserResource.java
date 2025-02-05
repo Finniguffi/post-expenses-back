@@ -1,12 +1,14 @@
 package com.expenses.resource;
 
 import com.expenses.constants.ErrorConstants;
-import com.expenses.entity.UserEntity;
+import com.expenses.dto.UserDTO;
 import com.expenses.exception.ApplicationException;
 import com.expenses.exception.ErrorResponse;
 import com.expenses.service.AuthService;
 import com.expenses.service.BalanceService;
 import com.expenses.service.UserService;
+import com.expenses.util.CheckAuthentication;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -32,10 +34,11 @@ public class UserResource {
 
     @GET
     @Path("{email}")
+    @CheckAuthentication
     public Response getUserByEmail(@PathParam("email") String email) {
         try {
             logger.info("Fetching user with email: {}", email);
-            UserEntity user = userService.getUserByEmail(email);
+            UserDTO user = userService.getUserByEmail(email);
             if (user == null) {
                 return Response.status(Response.Status.NOT_FOUND)
                         .entity(new ErrorResponse(ErrorConstants.USER_NOT_FOUND_CODE, ErrorConstants.USER_NOT_FOUND_MESSAGE))
@@ -57,6 +60,7 @@ public class UserResource {
 
     @GET
     @Path("/balance/{email}")
+    @CheckAuthentication
     public Response getUserBalance(@PathParam("email") String email) {
         try {
             Double balance = balanceService.getBalance(email);

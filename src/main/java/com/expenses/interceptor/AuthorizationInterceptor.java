@@ -30,7 +30,6 @@ public class AuthorizationInterceptor implements ContainerRequestFilter {
         String path = requestContext.getUriInfo().getPath();
 
         if (EXCLUDED_PATHS.contains(path)) {
-            System.err.println("TESTE1");
             return;
         }
 

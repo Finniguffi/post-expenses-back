@@ -41,7 +41,7 @@ public final class ErrorConstants {
 
     // Category-related errors
     public static final String CATEGORY_NOT_FOUND_CODE = "ERR010";
-    public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
+    public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found: ";
     public static final String CATEGORY_ALREADY_EXISTS_CODE = "ERR011";
     public static final String CATEGORY_ALREADY_EXISTS_MESSAGE = "Category already exists";
     public static final String SUB_CATEGORY_ALREADY_EXISTS_CODE = "ERR012";
