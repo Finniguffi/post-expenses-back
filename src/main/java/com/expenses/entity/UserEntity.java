@@ -1,7 +1,5 @@
 package com.expenses.entity;
 
-import com.expenses.dto.UserDTO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
