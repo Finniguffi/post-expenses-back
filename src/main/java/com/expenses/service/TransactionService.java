@@ -75,6 +75,7 @@ public class TransactionService {
             .setUserEmail(transaction.getUser().getEmail())
             .setDeposit(transaction.isDeposit())
             .setCategory(transaction.getCategory() != null ? transaction.getCategory().getName() : null)
+            .setSubCategory(transaction.getSubCategory())
             .build();
     }
     
@@ -87,6 +88,7 @@ public class TransactionService {
             .setUserEmail(recurringExpense.getUser().getEmail())
             .setDeposit(recurringExpense.isDeposit())
             .setCategory(recurringExpense.getCategory() != null ? recurringExpense.getCategory().getName() : null)
+            .setSubCategory(recurringExpense.getSubCategory())
             .build();
     }
 }

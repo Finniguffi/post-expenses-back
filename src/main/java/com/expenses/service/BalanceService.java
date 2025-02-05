@@ -72,6 +72,7 @@ public class BalanceService {
             throw new ApplicationException(ErrorConstants.CATEGORY_NOT_FOUND_CODE, ErrorConstants.CATEGORY_NOT_FOUND_MESSAGE + transactionDTO.getCategory());
         }
         transaction.setCategory(category);
+        transaction.setSubCategory(transactionDTO.getSubCategory());
 
         return transaction;
     }

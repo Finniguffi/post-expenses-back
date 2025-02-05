@@ -10,11 +10,12 @@ public class TransactionDTO {
     private String userEmail;
     private boolean isDeposit;
     private String category;
+    private String subCategory;
 
     public TransactionDTO() {
     }
 
-    public TransactionDTO(Long id, double amount, String description, LocalDateTime transactionDate, String userEmail, boolean isDeposit, String category) {
+    public TransactionDTO(Long id, double amount, String description, LocalDateTime transactionDate, String userEmail, boolean isDeposit, String category, String subCategory) {
         this.id = id;
         this.amount = amount;
         this.description = description;
@@ -22,6 +23,7 @@ public class TransactionDTO {
         this.userEmail = userEmail;
         this.isDeposit = isDeposit;
         this.category = category;
+        this.subCategory = subCategory;
     }
 
     public Long getId() {
@@ -80,6 +82,14 @@ public class TransactionDTO {
         this.category = category;
     }
 
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
     public static class Builder {
         private Long id;
         private double amount;
@@ -88,6 +98,7 @@ public class TransactionDTO {
         private String userEmail;
         private boolean isDeposit;
         private String category;
+        private String subCategory;
 
         public Builder setId(Long id) {
             this.id = id;
@@ -124,6 +135,11 @@ public class TransactionDTO {
             return this;
         }
 
+        public Builder setSubCategory(String subCategory) {
+            this.subCategory = subCategory;
+            return this;
+        }
+
         public TransactionDTO build() {
             return new TransactionDTO(this);
         }
@@ -137,5 +153,6 @@ public class TransactionDTO {
         this.userEmail = builder.userEmail;
         this.isDeposit = builder.isDeposit;
         this.category = builder.category;
+        this.subCategory = builder.subCategory;
     }
 }

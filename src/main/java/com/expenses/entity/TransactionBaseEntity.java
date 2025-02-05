@@ -30,6 +30,16 @@ public abstract class TransactionBaseEntity {
     @ManyToOne
     private CategoryEntity category;
 
+    private String subCategory;
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
     public Long getId() {
         return id;
     }
