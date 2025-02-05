@@ -73,7 +73,7 @@ public class BalanceResource {
 
     @POST
     @Path("/expense/{email}")
-    public Response postExpense(@PathParam("email") String email, TransactionDTO transactionDTO) {
+    public Response expense(@PathParam("email") String email, TransactionDTO transactionDTO) {
         try {
             Double newBalance = balanceService.processExpense(email, transactionDTO);
             return Response.ok().entity(newBalance).build();
