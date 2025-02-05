@@ -1,19 +1,26 @@
 package com.expenses.entity;
 
-import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "category_entity")
 public class CategoryEntity {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<SubCategoryEntity> subCategories;
+    @ElementCollection
+    private List<String> subCategories;
 
     public Long getId() {
         return id;
@@ -31,11 +38,11 @@ public class CategoryEntity {
         this.name = name;
     }
 
-    public List<SubCategoryEntity> getSubCategories() {
+    public List<String> getSubCategories() {
         return subCategories;
     }
 
-    public void setSubCategories(List<SubCategoryEntity> subCategories) {
+    public void setSubCategories(List<String> subCategories) {
         this.subCategories = subCategories;
     }
 }

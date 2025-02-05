@@ -3,6 +3,8 @@ package com.expenses.resource;
 import com.expenses.entity.CategoryEntity;
 import com.expenses.service.CategoryService;
 import com.expenses.dto.CategoryDTO;
+import com.expenses.dto.SubCategoryDTO;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -33,5 +35,12 @@ public class CategoryResource {
     public Response deleteCategory(CategoryDTO categoryDTO) {
         categoryService.deleteCategory(categoryDTO.getname());
         return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @PUT
+    @Path("/create/sub-category")
+    public Response createSubCategory(SubCategoryDTO subCategoryDTO) {
+        categoryService.createSubCategory(subCategoryDTO);
+        return Response.status(Response.Status.CREATED).build();
     }
 }

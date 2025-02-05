@@ -4,6 +4,7 @@ import com.expenses.entity.CategoryEntity;
 import com.expenses.repository.CategoryRepository;
 import com.expenses.exception.ApplicationException;
 import com.expenses.constants.ErrorConstants;
+import com.expenses.dto.SubCategoryDTO;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -39,5 +40,22 @@ public class CategoryService {
             throw new ApplicationException(ErrorConstants.CATEGORY_NOT_FOUND_CODE, ErrorConstants.CATEGORY_NOT_FOUND_MESSAGE);
         }
         categoryRepository.delete(existingCategory);
+    }
+
+    @Transactional
+    public void createSubCategory(SubCategoryDTO subCategoryDTO) {
+        CategoryEntity category = categoryRepository.findByName(subCategoryDTO.getCategoryName());
+        if (category == null) {
+            throw new ApplicationException(ErrorConstants.CATEGORY_NOT_FOUND_CODE, ErrorConstants.CATEGORY_NOT_FOUND_MESSAGE);
+        }
+
+        List<String> subCategories = category.getSubCategories();
+        if (subCategories.contains(subCategoryDTO.getName())) {
+            throw new ApplicationException(ErrorConstants.CATEGORY_ALREADY_EXISTS_CODE, ErrorConstants.CATEGORY_ALREADY_EXISTS_MESSAGE);
+        }
+        
+        subCategories.add(subCategoryDTO.getName());
+        category.setSubCategories(subCategories);
+        categoryRepository.persist(category);
     }
 }
